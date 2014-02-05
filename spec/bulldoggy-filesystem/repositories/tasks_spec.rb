@@ -26,18 +26,18 @@ module BulldoggyFilesystem
         end
       end
 
-      describe '#fetch' do
-        subject(:fetch) { tasks.fetch }
+      describe '#all' do
+        subject(:all) { tasks.all }
 
         context 'when there is tasks' do
           before do
             tasks.save(task)
           end
 
-          it { expect(fetch).to be_kind_of(Hash) }
+          it { expect(all).to be_kind_of(Hash) }
 
           context 'the first task' do
-            subject(:first_task) { fetch[1] }
+            subject(:first_task) { all[1] }
 
             it { should be_kind_of(Bulldoggy::Entities::Task) }
 
@@ -48,7 +48,7 @@ module BulldoggyFilesystem
         end
 
         context 'when there is no tasks' do
-          it { expect(fetch).to eql({}) }
+          it { expect(all).to eql({}) }
         end
       end
 
@@ -82,7 +82,7 @@ module BulldoggyFilesystem
 
         it 'deletes the task' do
           delete
-          expect(tasks.fetch[second_task.id]).to be_nil
+          expect(tasks.all[second_task.id]).to be_nil
         end
 
         it 'returns the deleted object' do
@@ -91,7 +91,7 @@ module BulldoggyFilesystem
 
         it 'keeps the first task' do
           delete
-          expect(tasks.fetch[task.id]).to_not be_nil
+          expect(tasks.all[task.id]).to_not be_nil
         end
 
         context 'when the task to delete does not exist' do

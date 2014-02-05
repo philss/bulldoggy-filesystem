@@ -16,7 +16,7 @@ module BulldoggyFilesystem
         @store = YAML::Store.new(self.class.filename)
       end
 
-      def fetch
+      def all
         {}.tap do |tasks|
           @store.transaction do
             @store.fetch(:tasks, []).each do |task|
