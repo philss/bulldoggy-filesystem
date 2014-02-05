@@ -9,7 +9,7 @@ module BulldoggyFilesystem
       end
 
       def self.filename
-        @@filename || './db/bulldoggy-tasks.yaml'
+        @@filename ||= './db/bulldoggy-tasks.yaml'
       end
 
       def initialize
