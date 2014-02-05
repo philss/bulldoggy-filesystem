@@ -1,7 +1,7 @@
 require 'bulldoggy'
 require 'yaml/store'
 
-module BulldogyFilesystem
+module BulldoggyFilesystem
   module Repositories
     class Tasks
       def self.filename=(filename)

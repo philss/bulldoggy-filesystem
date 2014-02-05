@@ -1,6 +1,6 @@
 require './lib/bulldoggy-filesystem/repositories/tasks'
 
-module BulldogyFilesystem
+module BulldoggyFilesystem
   module Repositories
     describe Tasks do
       subject(:tasks) { described_class.new }
