@@ -46,17 +46,28 @@ module BulldoggyFilesystem
 
       def delete(task_id)
         @store.transaction do
-          deleted = @store.fetch(:tasks).reject! {|task| task.id == task_id }
+          deleted = @store.fetch(:tasks).select {|task| task.id == task_id }
+          @store[:tasks] = @store.fetch(:tasks) - deleted
           Array(deleted).first
         end
       end
 
       def check(task_id)
-        raise NotImplementedError
+        @store.transaction do
+          tasks = Array(@store[:tasks])
+          task = detect_task_by_id(tasks, task_id)
+          task.done = true
+          task
+        end
       end
 
       def uncheck(task_id)
-        raise NotImplementedError
+        @store.transaction do
+          tasks = Array(@store[:tasks])
+          task = detect_task_by_id(tasks, task_id)
+          task.done = false
+          task
+        end
       end
 
       private

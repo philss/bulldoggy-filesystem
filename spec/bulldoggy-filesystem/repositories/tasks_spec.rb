@@ -102,9 +102,32 @@ module BulldoggyFilesystem
       end
 
       describe '#check' do
+        subject(:check) { tasks.check(task_id) }
+        let(:task_id) { task.id }
+
+        before do
+          tasks.save(task)
+        end
+
+        it 'marks a task as done' do
+          check
+          expect(tasks.find(task.id).done).to be_true
+        end
       end
 
       describe '#uncheck' do
+        subject(:uncheck) { tasks.uncheck(task_id) }
+        let(:task_id) { task.id }
+
+        before do
+          task.done = true
+          tasks.save(task)
+        end
+
+        it 'marks a task as not done' do
+          uncheck
+          expect(tasks.find(task.id).done).to be_false
+        end
       end
 
       def recreate_repository_file
