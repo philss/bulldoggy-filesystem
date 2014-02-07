@@ -17,12 +17,8 @@ module BulldoggyFilesystem
       end
 
       def all
-        {}.tap do |tasks|
-          @store.transaction do
-            @store.fetch(:tasks, []).each do |task|
-              tasks[task.id] = task
-            end
-          end
+        @store.transaction do
+          tasks
         end
       end
 
@@ -39,34 +35,27 @@ module BulldoggyFilesystem
 
       def find(task_id)
         @store.transaction do
-          tasks = Array(@store[:tasks])
-          detect_task_by_id(tasks, task_id)
+          detect_task_by_id(task_id)
         end
       end
 
       def delete(task_id)
         @store.transaction do
-          deleted = @store.fetch(:tasks).select {|task| task.id == task_id }
-          @store[:tasks] = @store.fetch(:tasks) - deleted
+          deleted = tasks.select {|task| task.id == task_id }
+          @store[:tasks] = tasks - deleted
           Array(deleted).first
         end
       end
 
       def check(task_id)
         @store.transaction do
-          tasks = Array(@store[:tasks])
-          task = detect_task_by_id(tasks, task_id)
-          task.done = true
-          task
+          set_task_status(task_id, true)
         end
       end
 
       def uncheck(task_id)
         @store.transaction do
-          tasks = Array(@store[:tasks])
-          task = detect_task_by_id(tasks, task_id)
-          task.done = false
-          task
+          set_task_status(task_id, false)
         end
       end
 
@@ -74,14 +63,27 @@ module BulldoggyFilesystem
 
       def find_last_id
         @store.transaction do
-          tasks = Array(@store[:tasks])
           task_with_max_id = tasks.max_by(&:id)
           task_with_max_id ? task_with_max_id.id : 0
         end
       end
 
-      def detect_task_by_id(tasks, task_id)
+      def set_task_status(task_id, done)
+        task = detect_task_by_id(task_id)
+        if task
+          task.done = done
+          task
+        else
+          :task_not_found
+        end
+      end
+
+      def detect_task_by_id(task_id)
         tasks.detect{ |task| task.id == task_id }
+      end
+
+      def tasks
+        @store.fetch(:tasks, [])
       end
     end
   end

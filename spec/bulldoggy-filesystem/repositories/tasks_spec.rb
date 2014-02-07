@@ -34,10 +34,10 @@ module BulldoggyFilesystem
             tasks.save(task)
           end
 
-          it { expect(all).to be_kind_of(Hash) }
+          it { expect(all).to be_kind_of(Array) }
 
           context 'the first task' do
-            subject(:first_task) { all[1] }
+            subject(:first_task) { all.first }
 
             it { should be_kind_of(Bulldoggy::Entities::Task) }
 
@@ -48,7 +48,7 @@ module BulldoggyFilesystem
         end
 
         context 'when there is no tasks' do
-          it { expect(all).to eql({}) }
+          it { expect(all).to eql([]) }
         end
       end
 
@@ -82,7 +82,7 @@ module BulldoggyFilesystem
 
         it 'deletes the task' do
           delete
-          expect(tasks.all[second_task.id]).to be_nil
+          expect(tasks.all.map(&:id)).to_not include(task_id_to_delete)
         end
 
         it 'returns the deleted object' do
@@ -91,7 +91,7 @@ module BulldoggyFilesystem
 
         it 'keeps the first task' do
           delete
-          expect(tasks.all[task.id]).to_not be_nil
+          expect(tasks.all.map(&:id)).to include(task.id)
         end
 
         context 'when the task to delete does not exist' do
@@ -113,6 +113,11 @@ module BulldoggyFilesystem
           check
           expect(tasks.find(task.id).done).to be_true
         end
+
+        context 'when task does not exist' do
+          let(:task_id) { 42 }
+          it { should == :task_not_found }
+        end
       end
 
       describe '#uncheck' do
@@ -127,6 +132,11 @@ module BulldoggyFilesystem
         it 'marks a task as not done' do
           uncheck
           expect(tasks.find(task.id).done).to be_false
+        end
+
+        context 'when task does not exist' do
+          let(:task_id) { 55 }
+          it { should == :task_not_found }
         end
       end
 
