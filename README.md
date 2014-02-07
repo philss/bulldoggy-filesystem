@@ -18,3 +18,7 @@ Bulldoggy::Repository.register :task, tasks_repository
 
 Check the [Bulldoggy Thor](https://github.com/philss/bulldoggy-thor) implementation that uses
 this gem.
+
+## Badges
+
+[![Code Climate](https://codeclimate.com/github/philss/bulldoggy-filesystem.png)](https://codeclimate.com/github/philss/bulldoggy-filesystem)
