@@ -5,7 +5,7 @@ require './lib/version'
 
 Gem::Specification.new do |s|
   s.name = "bulldoggy-filesystem"
-  s.summary = 'A filesystem repository strategy'
+  s.summary = 'A filesystem repository strategy for bulldoggy apps'
 
   s.files =  `git ls-files`.split("\n")
   s.test_files = `git ls-files -- {spec}/*`.split("\n")
