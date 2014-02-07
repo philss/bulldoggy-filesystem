@@ -15,3 +15,6 @@ tasks_repository = BulldoggyFilesystem::Repositories::Tasks.new
 
 Bulldoggy::Repository.register :task, tasks_repository
 ```
+
+Check the [Bulldoggy Thor](https://github.com/philss/bulldoggy-thor) implementation that uses
+this gem.
